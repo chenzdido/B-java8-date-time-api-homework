@@ -1,9 +1,6 @@
 package com.thoughtworks.capability.gtb;
 
-import java.time.LocalDateTime;
-import java.time.Period;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.*;
 import java.time.chrono.ChronoLocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -38,10 +35,15 @@ public class MeetingSystemV3 {
       bjMeetingTime = bjMeetingTime.plus(period);
       ZonedDateTime chiMeetingTime = bjMeetingTime.withZoneSameInstant(zonChiId);
       // 格式化新会议时间
-      String showTimeStr = formatter.format(chiMeetingTime);
+      int offset = chiMeetingTime.getOffset().getTotalSeconds();
+      String showTimeStr = formatter.format(chiMeetingTime.plusSeconds(offset));
       System.out.println(showTimeStr);
     } else {
+      Period period = Period.between(now.toLocalDate(),bjMeetingTime.toLocalDate());
       System.out.println("会议还没开始呢");
+      System.out.println("距离下次会议开始还有:" + period.getMonths() +
+              " 月" + period.getDays() +
+              " 天");
     }
   }
 }
